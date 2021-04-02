@@ -37,7 +37,14 @@ class NewsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+    	$request->validate([
+    		'title' => ['required', 'string', 'min:2']
+		]);
+
+
+    	$allowFields = $request->only('title', 'slug', 'description');
+
+    	return response()->json();
     }
 
     /**
