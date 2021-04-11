@@ -31,3 +31,21 @@ Route::get('/news', [NewsController::class, 'index'])
 Route::get('/news/show/{id}', [NewsController::class, 'show'])
 	->where('id', '\d+')
 	->name('news.show');
+
+
+Route::get('/collections', function() {
+	$collect = collect([
+		'string',
+		'age',
+		'name',
+		4
+	]);
+
+	dd($collect->last(function($last) {
+		 if(is_numeric($last)) {
+		 	 dd($last * 2);
+		 }
+
+		 return $last;
+	}));
+});

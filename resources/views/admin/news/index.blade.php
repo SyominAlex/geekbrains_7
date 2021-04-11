@@ -2,7 +2,7 @@
 @section('content')
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Список новостей</h1>
+        <h1 class="h3 mb-0 text-gray-800">Список новостей (Всего: {{ $count }})</h1>
         <a href="{{ route('admin.news.create') }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
                     class="fas fa-plus fa-sm text-white-50"></i> Добавить новую </a>
     </div>
@@ -18,11 +18,11 @@
         </tr>
         </thead>
         <tbody>
-        @forelse($newsList as $key => $news)
+        @forelse($news as $newsItem)
             <tr>
-                <td>{{ $key }}</td>
-                <td>{{ $news }}</td>
-                <td> {{ now() }}</td>
+                <td>{{ $newsItem->id }}</td>
+                <td>{{ $newsItem->title }}</td>
+                <td> {{ $newsItem->created_at }}</td>
                 <td><a href="">Ред.</a>&nbsp; <a href="">Уд.</a></td>
             </tr>
         @empty

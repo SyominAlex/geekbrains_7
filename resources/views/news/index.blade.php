@@ -2,16 +2,17 @@
 @section('content')
    <div class="row">
   <div class="col-lg-8 col-md-10 mx-auto">
-   @forelse ($newsList as $key => $news)
+   @forelse ($news as $newsItem)
    <article class="post-preview">
-    <a href="{{ route('news.show', ['id' => ++$key]) }}">
-     <h2 class="post-title">{!! $news  !!}</h2>
+    <a href="{{ route('news.show', ['id' => $newsItem->id]) }}">
+     <h2 class="post-title">{!! $newsItem->title  !!}</h2>
 
-     <h3 class="post-subtitle">Problems look mighty small from 150 miles up</h3>
+     <h3 class="post-subtitle">{!! $newsItem->text !!}</h3>
 
     </a>
     <p class="post-meta">Опубликовал Админ
-     {{ now() }} &middot;
+     {{ $newsItem->created_at ?? now() }} &middot;
+        <i>Категория: {{ $newsItem->category->title }}</i>
     </p>
    </article>
    <hr>
