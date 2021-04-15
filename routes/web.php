@@ -1,5 +1,6 @@
 <?php
 
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,19 +14,33 @@ use Illuminate\Support\Facades\Route;
 |
 */
 use App\Http\Controllers\NewsController;
+use App\Http\Controllers\Account\AccountController;
 use App\Http\Controllers\Admin\NewsController as AdminNewsController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
+use App\Http\Controllers\FakeNewsController;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::group(['middleware' => 'auth'], function() {
+Route::get('/logout', function() {
+	\Auth::logout();
+	return redirect()->route('login');
+})->name('logout');
+//for account
+Route::get('/account', AccountController::class)
+	   ->name('account');
 //for admin
-Route::group(['prefix' => 'admin', 'as' => 'admin.'], function() {
+Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'admin'], function() {
   Route::resource('/categories', AdminCategoryController::class);
   Route::resource('/news', AdminNewsController::class);
 });
+});
 
+//all
 Route::get('/news', [NewsController::class, 'index'])
 	->name('news');
 Route::get('/news/show/{id}', [NewsController::class, 'show'])
@@ -33,19 +48,9 @@ Route::get('/news/show/{id}', [NewsController::class, 'show'])
 	->name('news.show');
 
 
-Route::get('/collections', function() {
-	$collect = collect([
-		'string',
-		'age',
-		'name',
-		4
-	]);
+//guest
 
-	dd($collect->last(function($last) {
-		 if(is_numeric($last)) {
-		 	 dd($last * 2);
-		 }
+Route::get('/news/{news}', FakeNewsController::class);
+Auth::routes();
 
-		 return $last;
-	}));
-});
+
