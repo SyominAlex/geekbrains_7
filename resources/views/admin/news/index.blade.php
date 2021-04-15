@@ -23,7 +23,8 @@
                 <td>{{ $newsItem->id }}</td>
                 <td>{{ $newsItem->title }}</td>
                 <td> {{ $newsItem->created_at }}</td>
-                <td><a href="">Ред.</a>&nbsp; <a href="">Уд.</a></td>
+                <td><a href="{{ route('admin.news.edit', ['news' => $newsItem]) }}">Ред.</a>&nbsp;
+                    <a href="javascript:;" class="delete" rel="{{$newsItem->id}}">Уд.</a></td>
             </tr>
         @empty
             <tr>
@@ -34,3 +35,26 @@
         </table>
     </div>
 @endsection
+
+@push('js')
+    <script>
+        $(function() {
+            $(".delete").on('click', function() {
+            let id = $(this).attr('rel');
+            if (confirm("Подтверждаете?")) {
+                $.ajax({
+                    method: "delete",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                        'Content-Type': 'application/json',
+                    },
+                    url: "/admin/news/" + id,
+                    complete: function (response) {
+                        alert("Запись с ID" + id + " удалена");
+                    }
+                });
+            }
+            });
+        });
+    </script>
+@endpush
