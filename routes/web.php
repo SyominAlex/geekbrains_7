@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Route;
 */
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\Account\AccountController;
+use App\Http\Controllers\ParserController;
+use App\Http\Controllers\SocialiteController;
 use App\Http\Controllers\Admin\NewsController as AdminNewsController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\FakeNewsController;
@@ -50,7 +52,16 @@ Route::get('/news/show/{id}', [NewsController::class, 'show'])
 
 //guest
 
+Route::group(['middleware' => 'guest', 'prefix' => 'socialite'], function() {
+	Route::get('/auth/vk', [SocialiteController::class, 'init'])
+		->name('vk.init');
+	Route::get('/auth/vk/callback', [SocialiteController::class, 'callback'])
+		->name('vk.callback');
+});
+
 Route::get('/news/{news}', FakeNewsController::class);
 Auth::routes();
 
+
+Route::get('/parsing', ParserController::class);
 
